@@ -2,6 +2,8 @@
  * PreviewPanel - Shows upcoming tetromino pieces
  *
  * Displays the next 3 pieces in the queue so players can plan ahead.
+ * Responsive sizing adapts to panel width.
+ * Theme-aware using CSS custom properties.
  */
 
 import React, { memo } from 'react';
@@ -13,7 +15,7 @@ interface PreviewPanelProps {
 }
 
 /** Render a single piece preview in a small grid */
-const PiecePreview: React.FC<{ type: TetrominoType }> = memo(({ type }) => {
+const PiecePreview: React.FC<{ type: TetrominoType; cellSize?: number }> = memo(({ type, cellSize = 14 }) => {
   const shape = SHAPES[type];
   const colors = TETROMINO_COLORS[type];
   const blocks = shape.rotations[0]; // Always show spawn rotation
@@ -40,10 +42,10 @@ const PiecePreview: React.FC<{ type: TetrominoType }> = memo(({ type }) => {
   return (
     <div className="flex flex-col items-center">
       <div
-        className="grid gap-px mb-2"
+        className="grid gap-px mb-1 sm:mb-2"
         style={{
-          gridTemplateColumns: `repeat(${gridWidth}, 14px)`,
-          gridTemplateRows: `repeat(${gridHeight}, 14px)`,
+          gridTemplateColumns: `repeat(${gridWidth}, ${cellSize}px)`,
+          gridTemplateRows: `repeat(${gridHeight}, ${cellSize}px)`,
         }}
       >
         {Array.from({ length: gridHeight }, (_, r) =>
@@ -54,8 +56,8 @@ const PiecePreview: React.FC<{ type: TetrominoType }> = memo(({ type }) => {
                 key={`${r}-${c}`}
                 className="rounded-sm"
                 style={{
-                  width: 14,
-                  height: 14,
+                  width: cellSize,
+                  height: cellSize,
                   backgroundColor: hasBlock ? undefined : 'transparent',
                 }}
               >
@@ -82,22 +84,28 @@ PiecePreview.displayName = 'PiecePreview';
 const PreviewPanel: React.FC<PreviewPanelProps> = memo(({ nextPieces }) => {
   return (
     <div
-      className="flex flex-col gap-3 p-4 rounded-lg"
+      className="flex flex-col gap-2 sm:gap-3 p-2 sm:p-3 md:p-4 rounded-lg"
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.03)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        backgroundColor: 'var(--bg-panel)',
+        border: '1px solid var(--border-panel)',
       }}
       role="region"
       aria-label="Next pieces preview"
     >
-      <div className="text-xs font-mono text-gray-400 uppercase tracking-wider mb-1">
+      <div
+        className="font-mono uppercase tracking-wider mb-0.5 sm:mb-1"
+        style={{
+          color: 'var(--text-dim)',
+          fontSize: 'clamp(7px, 1.5vw, 10px)',
+        }}
+      >
         NEXT
       </div>
       {nextPieces.map((type, i) => (
-        <PiecePreview key={`${type}-${i}`} type={type} />
+        <PiecePreview key={`${type}-${i}`} type={type} cellSize={i === 0 ? 16 : 12} />
       ))}
       {nextPieces.length === 0 && (
-        <div className="text-xs text-gray-600 italic">No upcoming pieces</div>
+        <div className="text-xs italic" style={{ color: 'var(--text-faint)' }}>No upcoming pieces</div>
       )}
     </div>
   );

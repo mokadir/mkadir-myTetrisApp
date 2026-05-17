@@ -3,6 +3,8 @@
  *
  * Renders colored blocks with gradient and glow effects.
  * Supports different visual states: active, ghost, cleared.
+ * Cell dimensions driven by CSS custom property --cell-size for responsiveness.
+ * Theme-aware using CSS custom properties.
  */
 
 import React, { memo } from 'react';
@@ -18,6 +20,7 @@ interface CellProps {
 /**
  * Memoized cell component to prevent unnecessary re-renders.
  * Only re-renders when its visual properties change.
+ * Uses CSS variable --cell-size for responsive dimensions.
  */
 const Cell: React.FC<CellProps> = memo(({
   color,
@@ -32,8 +35,10 @@ const Cell: React.FC<CellProps> = memo(({
       <div
         className="w-full h-full"
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.02)',
-          border: '1px solid rgba(255, 255, 255, 0.03)',
+          width: 'var(--cell-size)',
+          height: 'var(--cell-size)',
+          backgroundColor: 'var(--cell-empty-bg)',
+          border: '1px solid var(--cell-empty-border)',
           borderRadius: '2px',
         }}
         aria-hidden="true"
@@ -47,8 +52,10 @@ const Cell: React.FC<CellProps> = memo(({
       <div
         className="w-full h-full rounded-sm"
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.08)',
-          border: `1px solid ${glowColor || 'rgba(255,255,255,0.3)'}`,
+          width: 'var(--cell-size)',
+          height: 'var(--cell-size)',
+          backgroundColor: 'var(--ghost-bg)',
+          border: `1px solid ${glowColor || 'var(--ghost-border)'}`,
           borderRadius: '2px',
           boxShadow: `inset 0 0 4px ${glowColor || 'transparent'}`,
           animation: 'ghostPulse 1.5s ease-in-out infinite',
@@ -68,6 +75,8 @@ const Cell: React.FC<CellProps> = memo(({
       <div
         className="w-full h-full"
         style={{
+          width: 'var(--cell-size)',
+          height: 'var(--cell-size)',
           backgroundColor: '#ffffff',
           transform: `scaleY(${scale})`,
           opacity,
@@ -86,6 +95,8 @@ const Cell: React.FC<CellProps> = memo(({
     <div
       className="w-full h-full relative"
       style={{
+        width: 'var(--cell-size)',
+        height: 'var(--cell-size)',
         borderRadius: '3px',
         overflow: 'hidden',
       }}

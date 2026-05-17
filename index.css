@@ -1,23 +1,43 @@
+/* Import arcade-style fonts */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Import arcade-style fonts */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;500;700&display=swap');
-
-/* Base styles */
+/* ─── CSS Custom Properties (set by ThemeContext) ─────────────────────── */
 :root {
-  --cell-size: 28px;
+  --cell-size: min(3.5vw, 28px);
   --board-cols: 10;
   --board-rows: 20;
 }
 
 @media (min-width: 640px) {
   :root {
-    --cell-size: 32px;
+    --cell-size: min(4vh, 32px);
   }
 }
 
+@media (min-width: 1024px) {
+  :root {
+    --cell-size: min(4.5vh, 36px);
+  }
+}
+
+@media (max-width: 380px) {
+  :root {
+    --cell-size: min(6vw, 24px);
+  }
+}
+
+/* Landscape phones - smaller cells */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --cell-size: min(5vh, 22px);
+  }
+}
+
+/* ─── Base Styles ────────────────────────────────────────────────────── */
 * {
   box-sizing: border-box;
 }
@@ -30,16 +50,17 @@ html, body, #root {
 }
 
 body {
-  background: linear-gradient(135deg, #0a0a0f 0%, #12121a 50%, #0a0a0f 100%);
-  color: #e0e0e0;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%);
+  color: var(--text-primary);
   font-family: 'JetBrains Mono', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   user-select: none;
   -webkit-user-select: none;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Scrollbar styling */
+/* ─── Scrollbar Styling ──────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -51,13 +72,13 @@ body {
   border-radius: 2px;
 }
 
-/* Touch control area to prevent default behaviors */
+/* ─── Touch Control Area ─────────────────────────────────────────────── */
 .touch-controls-area {
   touch-action: manipulation;
   -webkit-touch-callout: none;
 }
 
-/* Keyframe for row clear flash effect */
+/* ─── Keyframe Animations ────────────────────────────────────────────── */
 @keyframes rowClearFlash {
   0% { background: white; box-shadow: 0 0 20px rgba(255,255,255,0.8); }
   100% { background: transparent; box-shadow: none; }
@@ -68,7 +89,29 @@ body {
   50% { opacity: 0.3; }
 }
 
-/* Glow effects for tetrominoes */
+@keyframes scorePopup {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+/* ─── Theme Transition ────────────────────────────────────────────────── */
+.theme-transitioning * {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* ─── Utility Classes ────────────────────────────────────────────────── */
+.panel-min-width {
+  min-width: clamp(80px, 18vw, 130px);
+}
+
+.accelerate {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* ─── Tetromino Glow ─────────────────────────────────────────────────── */
 .tetromino-glow {
   position: relative;
 }
@@ -80,18 +123,4 @@ body {
   opacity: 0.3;
   filter: blur(3px);
   z-index: -1;
-}
-
-/* Score pop animation */
-@keyframes scorePopup {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 0; }
-}
-
-/* Hardware-accelerate animations */
-.accelerate {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
 }

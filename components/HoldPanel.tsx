@@ -3,6 +3,8 @@
  *
  * Shows which piece is in the hold slot and whether
  * the player can use the hold feature again.
+ * Responsive sizing adapts to panel width.
+ * Theme-aware using CSS custom properties.
  */
 
 import React, { memo } from 'react';
@@ -17,17 +19,23 @@ interface HoldPanelProps {
 const HoldPanel: React.FC<HoldPanelProps> = memo(({ holdPiece, canHold }) => {
   return (
     <div
-      className="flex flex-col items-center p-4 rounded-lg"
+      className="flex flex-col items-center p-2 sm:p-3 md:p-4 rounded-lg"
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.03)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        backgroundColor: 'var(--bg-panel)',
+        border: '1px solid var(--border-panel)',
         opacity: canHold ? 1 : 0.5,
         transition: 'opacity 0.2s ease',
       }}
       role="region"
       aria-label={holdPiece ? `Holding ${holdPiece} piece` : 'Hold piece slot'}
     >
-      <div className="text-xs font-mono text-gray-400 uppercase tracking-wider mb-3">
+      <div
+        className="font-mono uppercase tracking-wider mb-1 sm:mb-2 md:mb-3"
+        style={{
+          color: 'var(--text-dim)',
+          fontSize: 'clamp(7px, 1.5vw, 10px)',
+        }}
+      >
         HOLD
       </div>
 
@@ -37,17 +45,23 @@ const HoldPanel: React.FC<HoldPanelProps> = memo(({ holdPiece, canHold }) => {
         <div
           className="flex items-center justify-center"
           style={{
-            width: 60,
-            height: 40,
-            border: '2px dashed rgba(255, 255, 255, 0.1)',
+            width: 'clamp(40px, 10vw, 60px)',
+            height: 'clamp(28px, 7vw, 40px)',
+            border: '2px dashed var(--empty-slot-border)',
             borderRadius: '4px',
           }}
         >
-          <span className="text-xs text-gray-600">Empty</span>
+          <span style={{ color: 'var(--empty-slot-text)', fontSize: 'clamp(7px, 1.5vw, 10px)' }}>Empty</span>
         </div>
       )}
 
-      <div className="mt-2 text-[10px] text-gray-500 font-mono">
+      <div
+        className="mt-1 sm:mt-2 font-mono"
+        style={{
+          color: 'var(--text-faint)',
+          fontSize: 'clamp(7px, 1.2vw, 10px)',
+        }}
+      >
         {canHold ? 'Shift / C' : 'Used'}
       </div>
     </div>
@@ -77,12 +91,14 @@ const PiecePreview: React.FC<{ type: TetrominoType }> = memo(({ type }) => {
 
   const blockSet = new Set(normalizedBlocks.map(b => `${b.row},${b.col}`));
 
+  const cellSize = 14;
+
   return (
     <div
       className="grid gap-px"
       style={{
-        gridTemplateColumns: `repeat(${gridWidth}, 14px)`,
-        gridTemplateRows: `repeat(${gridHeight}, 14px)`,
+        gridTemplateColumns: `repeat(${gridWidth}, ${cellSize}px)`,
+        gridTemplateRows: `repeat(${gridHeight}, ${cellSize}px)`,
       }}
     >
       {Array.from({ length: gridHeight }, (_, r) =>
@@ -91,7 +107,7 @@ const PiecePreview: React.FC<{ type: TetrominoType }> = memo(({ type }) => {
           return (
             <div
               key={`${r}-${c}`}
-              style={{ width: 14, height: 14 }}
+              style={{ width: cellSize, height: cellSize }}
             >
               {hasBlock && (
                 <div

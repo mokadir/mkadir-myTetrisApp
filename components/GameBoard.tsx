@@ -3,6 +3,8 @@
  *
  * Renders the grid with placed blocks, current active piece,
  * ghost piece projection, and line clear animations.
+ * Fully responsive using CSS custom properties.
+ * Theme-aware using CSS custom properties.
  */
 
 import React, { memo, useMemo } from 'react';
@@ -24,6 +26,7 @@ interface GameBoardProps {
 /**
  * GameBoard component - renders the full playing field.
  * Uses memo and careful keying to minimize re-renders.
+ * Cell size is driven by CSS custom property --cell-size for responsiveness.
  */
 const GameBoard: React.FC<GameBoardProps> = memo(({
   board,
@@ -77,18 +80,18 @@ const GameBoard: React.FC<GameBoardProps> = memo(({
       <div
         className="relative border-2 rounded-lg overflow-hidden"
         style={{
-          borderColor: 'rgba(0, 245, 255, 0.4)',
-          boxShadow: '0 0 30px rgba(0, 245, 255, 0.1), inset 0 0 30px rgba(0, 245, 255, 0.05)',
-          width: width * 28 + 4,
-          height: height * 28 + 4,
+          borderColor: 'var(--board-border)',
+          boxShadow: 'var(--board-shadow)',
+          width: `calc(var(--cell-size) * ${width} + 4px)`,
+          height: `calc(var(--cell-size) * ${height} + 4px)`,
         }}
       >
         {/* Grid cells */}
         <div
           className="grid gap-0"
           style={{
-            gridTemplateColumns: `repeat(${width}, 28px)`,
-            gridTemplateRows: `repeat(${height}, 28px)`,
+            gridTemplateColumns: `repeat(${width}, var(--cell-size))`,
+            gridTemplateRows: `repeat(${height}, var(--cell-size))`,
           }}
         >
           {board.map((row, rowIdx) =>
@@ -132,7 +135,7 @@ const GameBoard: React.FC<GameBoardProps> = memo(({
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)',
+            background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--scanline-color) 2px, var(--scanline-color) 4px)',
             zIndex: 10,
           }}
           aria-hidden="true"
@@ -142,10 +145,10 @@ const GameBoard: React.FC<GameBoardProps> = memo(({
         {status === 'paused' && (
           <Overlay>
             <div className="text-center animate-fade-in">
-              <div className="text-3xl font-arcade text-neon-cyan mb-4" style={{ fontSize: '14px' }}>
+              <div className="font-arcade text-neon-cyan mb-4" style={{ fontSize: 'clamp(10px, 2.5vw, 14px)' }}>
                 PAUSED
               </div>
-              <div className="text-sm text-gray-400 font-mono">
+              <div className="font-mono" style={{ color: 'var(--text-dim)', fontSize: 'clamp(10px, 1.8vw, 14px)' }}>
                 Press 'P' to resume
               </div>
             </div>
@@ -155,10 +158,10 @@ const GameBoard: React.FC<GameBoardProps> = memo(({
         {status === 'idle' && (
           <Overlay>
             <div className="text-center animate-fade-in">
-              <div className="text-3xl font-arcade text-neon-cyan mb-4" style={{ fontSize: '12px' }}>
+              <div className="font-arcade text-neon-cyan mb-4" style={{ fontSize: 'clamp(10px, 2.5vw, 14px)' }}>
                 TETRIS
               </div>
-              <div className="text-sm text-gray-400 font-mono mb-6">
+              <div className="font-mono mb-6" style={{ color: 'var(--text-dim)', fontSize: 'clamp(10px, 1.8vw, 14px)' }}>
                 Press any key to start
               </div>
             </div>
@@ -168,14 +171,19 @@ const GameBoard: React.FC<GameBoardProps> = memo(({
         {status === 'gameover' && (
           <Overlay>
             <div className="text-center animate-fade-in">
-              <div className="text-3xl font-arcade text-neon-red mb-4" style={{ fontSize: '12px' }}>
+              <div className="font-arcade text-neon-red mb-4" style={{ fontSize: 'clamp(10px, 2.5vw, 14px)' }}>
                 GAME OVER
               </div>
               <button
                 onClick={onRestart}
-                className="px-6 py-2 mt-4 bg-neon-cyan/20 border border-neon-cyan/50
-                  text-neon-cyan font-mono text-sm rounded hover:bg-neon-cyan/30
+                className="px-4 sm:px-6 py-1.5 sm:py-2 mt-4 font-mono rounded
                   transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-neon-cyan/50"
+                style={{
+                  backgroundColor: 'rgba(0, 245, 255, 0.15)',
+                  border: '1px solid rgba(0, 245, 255, 0.4)',
+                  color: '#00f5ff',
+                  fontSize: 'clamp(10px, 1.8vw, 14px)',
+                }}
                 aria-label="Restart game"
               >
                 PLAY AGAIN
@@ -193,7 +201,7 @@ const Overlay: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div
     className="absolute inset-0 flex items-center justify-center z-20"
     style={{
-      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+      backgroundColor: 'var(--overlay-bg)',
       backdropFilter: 'blur(4px)',
     }}
     role="alert"

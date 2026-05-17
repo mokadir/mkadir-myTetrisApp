@@ -4,6 +4,8 @@
  * Provides touch-friendly buttons for mobile users
  * and alternate input methods. Includes Start, Pause,
  * Restart, and direction buttons.
+ * Responsive sizing adapts to screen width.
+ * Theme-aware using CSS custom properties.
  */
 
 import React, { memo, useCallback } from 'react';
@@ -27,15 +29,16 @@ const ActionButton: React.FC<{
   <button
     onClick={onClick}
     aria-label={ariaLabel}
-    className={`touch-controls-area px-4 py-2 rounded text-sm font-mono font-bold
+    className={`touch-controls-area px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded text-sm font-mono font-bold
       transition-all duration-150 active:scale-95 focus:outline-none focus:ring-2
       focus:ring-neon-cyan/50 select-none ${className}`}
     style={{
-      backgroundColor: active ? 'rgba(0, 245, 255, 0.2)' : 'rgba(255, 255, 255, 0.08)',
-      border: active ? '1px solid rgba(0, 245, 255, 0.5)' : '1px solid rgba(255, 255, 255, 0.12)',
-      color: active ? '#00f5ff' : '#c0c0c0',
-      minWidth: 48,
-      minHeight: 44,
+      backgroundColor: active ? 'var(--btn-bg-active)' : 'var(--btn-bg)',
+      border: active ? '1px solid var(--btn-border-active)' : '1px solid var(--btn-border)',
+      color: active ? 'var(--btn-color-active)' : 'var(--btn-color)',
+      fontSize: 'clamp(11px, 2.5vw, 14px)',
+      minWidth: 'clamp(40px, 10vw, 56px)',
+      minHeight: 'clamp(36px, 8vw, 44px)',
     }}
   >
     {label}
@@ -55,13 +58,14 @@ const DirButton: React.FC<{
     onClick={onClick}
     aria-label={ariaLabel}
     className={`touch-controls-area flex items-center justify-center rounded-lg
-      transition-all duration-100 active:scale-90 active:bg-white/10
-      focus:outline-none select-none ${size === 'lg' ? 'w-16 h-16' : 'w-14 h-14'}`}
+      transition-all duration-100 active:scale-90 focus:outline-none select-none`}
     style={{
-      backgroundColor: 'rgba(255, 255, 255, 0.06)',
-      border: '1px solid rgba(255, 255, 255, 0.12)',
-      color: '#e0e0e0',
-      fontSize: size === 'lg' ? '24px' : '20px',
+      backgroundColor: 'var(--dir-btn-bg)',
+      border: '1px solid var(--dir-btn-border)',
+      color: 'var(--dir-btn-color)',
+      fontSize: size === 'lg' ? 'clamp(20px, 5vw, 28px)' : 'clamp(16px, 4vw, 22px)',
+      width: size === 'lg' ? 'clamp(48px, 12vw, 64px)' : 'clamp(42px, 10vw, 56px)',
+      height: size === 'lg' ? 'clamp(48px, 12vw, 64px)' : 'clamp(42px, 10vw, 56px)',
       touchAction: 'manipulation',
     }}
   >
@@ -94,9 +98,9 @@ const Controls: React.FC<ControlsProps> = memo(({
   const isIdle = status === 'idle';
 
   return (
-    <div className="space-y-3" role="group" aria-label="Game controls">
+    <div className="space-y-1.5 sm:space-y-2 md:space-y-3" role="group" aria-label="Game controls">
       {/* Top row - Game state buttons */}
-      <div className="flex gap-2 justify-center">
+      <div className="flex gap-1.5 sm:gap-2 justify-center">
         {(isIdle || isGameOver) && (
           <ActionButton
             onClick={handleAction('RESTART')}
@@ -137,12 +141,12 @@ const Controls: React.FC<ControlsProps> = memo(({
 
       {/* Directional controls for mobile */}
       <div
-        className="flex flex-col items-center gap-2 mt-4"
+        className="flex flex-col items-center gap-1 sm:gap-2 mt-1 sm:mt-2 md:mt-4"
         role="group"
         aria-label="Directional controls"
       >
-        {/* Top row */}
-        <div className="flex gap-10">
+        {/* Top row - rotate */}
+        <div className="flex gap-8 sm:gap-10">
           <DirButton
             onClick={handleAction('ROTATE')}
             label="↻"
@@ -151,7 +155,7 @@ const Controls: React.FC<ControlsProps> = memo(({
         </div>
 
         {/* Middle row - left, down, right */}
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-2 sm:gap-3 items-center">
           <DirButton
             onClick={handleAction('MOVE_LEFT')}
             label="←"
@@ -171,7 +175,7 @@ const Controls: React.FC<ControlsProps> = memo(({
         </div>
 
         {/* Bottom row - hard drop and hold */}
-        <div className="flex gap-3 mt-1">
+        <div className="flex gap-2 sm:gap-3 mt-0.5 sm:mt-1">
           <ActionButton
             onClick={handleAction('HARD_DROP')}
             label="DROP"
