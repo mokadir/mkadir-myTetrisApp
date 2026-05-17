@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: tetrisapp-container
-          image: mokadir/tetrisapp:4
+          image: mokadir/tetrisapp:5
           ports:
             - containerPort: 80
           resources:
