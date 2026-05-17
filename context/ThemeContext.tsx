@@ -107,9 +107,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       root.style.setProperty('--border-strong', 'rgba(0, 0, 0, 0.15)');
       root.style.setProperty('--text-primary', '#1a1a2e');
       root.style.setProperty('--text-secondary', '#2d2d44');
-      root.style.setProperty('--text-muted', '#6b7280');
-      root.style.setProperty('--text-dim', '#9ca3af');
-      root.style.setProperty('--text-faint', '#b0b0b0');
+      root.style.setProperty('--text-muted', '#4b5563');
+      root.style.setProperty('--text-dim', '#5a5a7a');
+      root.style.setProperty('--text-faint', '#7a7a9a');
       root.style.setProperty('--cell-empty-bg', 'rgba(0, 0, 0, 0.03)');
       root.style.setProperty('--cell-empty-border', 'rgba(0, 0, 0, 0.06)');
       root.style.setProperty('--overlay-bg', 'rgba(255, 255, 255, 0.85)');
@@ -129,9 +129,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       root.style.setProperty('--ghost-bg', 'rgba(0, 0, 0, 0.08)');
       root.style.setProperty('--ghost-border', 'rgba(0, 0, 0, 0.2)');
       root.style.setProperty('--empty-slot-border', 'rgba(0, 0, 0, 0.15)');
-      root.style.setProperty('--empty-slot-text', '#9ca3af');
-      root.style.setProperty('--keyboard-hint', '#9ca3af');
-      root.style.setProperty('--subtitle-color', '#9ca3af');
+      root.style.setProperty('--empty-slot-text', '#7a7a9a');
+      root.style.setProperty('--keyboard-hint', '#7a7a9a');
+      root.style.setProperty('--subtitle-color', '#7a7a9a');
     }
 
     // Toggle a class on the body for any Tailwind dark: variants
