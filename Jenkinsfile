@@ -164,6 +164,7 @@ spec:
                 container('tools') {
                     sh '''
                         set -eux
+                        rm -rf node_modules package-lock.json
                         npm ci --loglevel=error --omit=optional --ignore-scripts --no-audit --no-fund
                         echo "Dependencies installed successfully"
                     '''
