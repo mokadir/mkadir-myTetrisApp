@@ -15,13 +15,13 @@
  */
 
 import {
-  Board, Cell, Piece, Position, RotationState,
-  GameStatus, GameStats, GameAction, GameConfig,
+  Board, Piece, Position, RotationState,
+  GameStatus, GameStats, GameAction,
   TetrominoType, LineClearAnimation
 } from '../types';
 import {
   GAME_CONFIG, getShape, generateBag, getWallKicks,
-  TETROMINO_COLORS, ALL_TETROMINOS
+  TETROMINO_COLORS
 } from '../constants';
 
 // ─── STATE INTERFACE ────────────────────────────────────────────────────────
@@ -529,8 +529,8 @@ export function processAction(
             combo,
             highScore: newHighScore,
           },
-          nextPieces: ns.nextPieces,
-          bag: ns.bag,
+          nextPieces: ns.nextPieces ?? state.nextPieces,
+          bag: ns.bag ?? state.bag,
           lineClearAnimation: lineAnim,
           lastDropTime: timestamp,
           lastActionTime: timestamp,
@@ -583,8 +583,8 @@ export function processAction(
           state: {
             ...state,
             status: 'gameover',
-            sound: 'gameOver',
           },
+          sound: 'gameOver',
         };
       }
 
@@ -690,8 +690,8 @@ export function processGravityTick(
           combo,
           highScore: newHighScore,
         },
-        nextPieces: ns.nextPieces,
-        bag: ns.bag,
+        nextPieces: ns.nextPieces ?? state.nextPieces,
+        bag: ns.bag ?? state.bag,
         lineClearAnimation: lineAnim,
         lastDropTime: timestamp,
         lastActionTime: timestamp,

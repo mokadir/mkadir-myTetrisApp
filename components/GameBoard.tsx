@@ -6,7 +6,7 @@
  */
 
 import React, { memo, useMemo } from 'react';
-import { Board as BoardType, Piece, Position } from '../types';
+import { Board as BoardType, Piece } from '../types';
 import { getPieceBlocks } from '../engine/GameEngine';
 import { TETROMINO_COLORS } from '../constants';
 import Cell from './Cell';
@@ -101,7 +101,6 @@ const GameBoard: React.FC<GameBoardProps> = memo(({
               // Determine display properties
               let displayColor = cell;
               let isGhost = false;
-              let isClearing = false;
               let glow = undefined;
 
               if (isActiveBlock && currentPiece) {
@@ -113,12 +112,6 @@ const GameBoard: React.FC<GameBoardProps> = memo(({
                 isGhost = true;
                 displayColor = currentGlowColor || 'bg-white';
                 glow = currentGlowColor;
-              }
-
-              if (isClearingRow) {
-                // Show clearing animation on top
-                isClearing = true;
-                // Keep the original color underneath
               }
 
               return (

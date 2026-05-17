@@ -13,7 +13,7 @@ interface PreviewPanelProps {
 }
 
 /** Render a single piece preview in a small grid */
-const PiecePreview: React.FC<{ type: TetrominoType; label: string }> = memo(({ type, label }) => {
+const PiecePreview: React.FC<{ type: TetrominoType }> = memo(({ type }) => {
   const shape = SHAPES[type];
   const colors = TETROMINO_COLORS[type];
   const blocks = shape.rotations[0]; // Always show spawn rotation
@@ -94,7 +94,7 @@ const PreviewPanel: React.FC<PreviewPanelProps> = memo(({ nextPieces }) => {
         NEXT
       </div>
       {nextPieces.map((type, i) => (
-        <PiecePreview key={`${type}-${i}`} type={type} label={`Piece ${i + 1}`} />
+        <PiecePreview key={`${type}-${i}`} type={type} />
       ))}
       {nextPieces.length === 0 && (
         <div className="text-xs text-gray-600 italic">No upcoming pieces</div>

@@ -18,7 +18,7 @@ interface ControlsProps {
 
 /** Styled action button */
 const ActionButton: React.FC<{
-  onClick: () => void;
+  onClick: (...args: any[]) => void;
   label: string;
   ariaLabel: string;
   className?: string;
@@ -46,7 +46,7 @@ ActionButton.displayName = 'ActionButton';
 
 /** Directional control button */
 const DirButton: React.FC<{
-  onClick: () => void;
+  onClick: (...args: any[]) => void;
   label: string;
   ariaLabel: string;
   size?: 'sm' | 'lg';
@@ -78,10 +78,12 @@ const Controls: React.FC<ControlsProps> = memo(({
   onToggleMute,
 }) => {
   const handleAction = useCallback(
-    (action: GameAction) => (e: React.MouseEvent | React.TouchEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      onAction(action);
+    (action: GameAction) => {
+      return (e: React.MouseEvent | React.TouchEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onAction(action);
+      };
     },
     [onAction]
   );

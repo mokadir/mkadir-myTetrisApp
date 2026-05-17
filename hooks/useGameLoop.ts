@@ -8,8 +8,8 @@
 
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import {
-  GameState, GameAction, Piece, TetrominoType,
-  Position, Cell, Board
+  GameAction, Piece, TetrominoType,
+  Board
 } from '../types';
 import {
   createInitialState,
@@ -18,8 +18,9 @@ import {
   shouldDrop,
   getDropInterval,
   updateAnimation,
+  GameState,
 } from '../engine/GameEngine';
-import { GAME_CONFIG, TETROMINO_COLORS } from '../constants';
+import { GAME_CONFIG } from '../constants';
 import { soundManager } from '../audio/SoundManager';
 
 /** Fields to derive/compute for component consumption */
@@ -61,13 +62,11 @@ export function useGameLoop(): { gameState: DerivedGameState; controls: GameCont
 
   // Animation frame ID
   const animFrameId = useRef<number>(0);
-  // Timestamp tracking for corrected delta time
-  const lastTimestamp = useRef(0);
 
   // Derived state - computed from game state for rendering
   const derivedState = useMemo((): DerivedGameState => {
     const s = stateRef.current;
-    const { currentPiece, ghostPosition, board, lineClearAnimation, stats } = s;
+    const { currentPiece, ghostPosition, lineClearAnimation, stats } = s;
 
     // Build ghost piece for display
     let ghostPiece: Piece | null = null;
