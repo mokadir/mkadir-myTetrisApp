@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ns-tetrisapp
+  name: tetrisapp-service
+  labels:
+    app: tetrisapp
+spec:
+  selector:
+    app: tetrisapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30018
+  type: NodePort
